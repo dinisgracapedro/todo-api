@@ -15,5 +15,16 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+           $exceptions->render(function (AuthenticationException $e, $request) {
+
+        // 🔥 força resposta JSON para rotas API
+        if ($request->is('api/*')) {
+            return response()->json([
+                'message' => 'Não autenticado.'
+            ], 401);
+        }
+
+        // deixa comportamento normal para web
+    });
+
     })->create();
